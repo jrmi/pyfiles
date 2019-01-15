@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ ]
+requirements = ['begins', 'boto3', 'sanic']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -40,7 +40,12 @@ setup(
     include_package_data=True,
     keywords='pyfiles',
     name='pyfiles',
-    packages=find_packages(include=['pyfiles']),
+    entry_points={
+        'console_scripts': [
+            'pyfiles = pyfiles.commands:run.start',
+        ]
+    },
+    packages=find_packages(include=['pyfiles', 'pyfiles.storages']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

@@ -20,17 +20,50 @@ pyfiles
 
 
 
-File collection manager
+A Big file collection manager.
+
+Usage
+-----
+
+Start inside the served data directory.
 
 
-* Free software: MIT license
-* Documentation: https://pyfiles.readthedocs.io.
+API
+----
 
+**GET** on `/file/<namespace>/<filename>[?version=<version>]`
+
+To download a file. Namespace is a namespace to organise data and filename is the filename.
+You can optionnaly add a version like `latest` or `<year>` or `<year.month>`, ...
+You get the latest for the specified version.
+
+**GET** on `/versions/<namespace>/<filename>`
+
+To show all avaible file versions.
 
 Features
 --------
 
-* TODO
+* An API to download files with rich version selection
+* List all version of a file
+* Can be used for CSV or Geojson files
+* File can have version like 2018.01.10-01
+* Find file by a part of the version. `2018` or `2018.01`
+
+Roadmap
+-------
+
+* Handle file diff between versions
+* Allow authentification with private data
+* Be storage agnostic
+* Get the update date of a file to ease caching
+* Add a client library and CLI
+
+License
+------
+
+* Free software: MIT license
+* Documentation: https://pyfiles.readthedocs.io.
 
 Credits
 -------

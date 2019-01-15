@@ -6,9 +6,12 @@ name = "pypi"
 [packages]
 sanic = "*"
 aiofiles = "*"
+"boto3" = "*"
+begins = "*"
 
 [dev-packages]
 pylint = "*"
+rope = "*"
 
 [requires]
 python_version = "3.6"
