@@ -76,11 +76,17 @@ To search for a file:
 
 `version-prefix` can be YYYY or YYYY.MM or YYYY.MM.DD or Latest. Latest if missing.
 
+To start the web api server:
+
+.. code-block:: sh
+
+    $ pyfiles serve
+
 
 Web API
 ------
 
-    **GET** on `/file/<namespace>/<filename>[?version=<version>]`
+    **GET** on `/search/<namespace>/<filename>[?version=<version>]`
 
 To get file version download link. `Namespace` is a namespace to organise data and `filename` is the file name.
 You can optionnaly add a version like `latest` or `<year>` or `<year.month>`, ...

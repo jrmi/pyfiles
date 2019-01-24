@@ -8,28 +8,32 @@ from sanic import response
 from sanic.exceptions import NotFound
 from pyfiles.storages import DiskStorage
 
-app = Sanic()
 
-cwd = os.getcwd()
+def get_app(storage):
 
-storage = DiskStorage(basepath=cwd, base_url="dld")
+    app = Sanic()
 
-@app.get('/file/<namespace>/<filename>')
-async def download(request, namespace, filename):
+    @app.get('/')
+    async def home(request):
+        return response.html("<h1>Web api started and working. Good luck!</h1>")
 
-    version = request.args.get('version') or 'latest'
 
-    fileinfo = await storage.search(namespace, filename, version)
-    fileinfo = await storage.search(namespace, filename, version)
+    @app.get('/search/<namespace>/<filename>')
+    async def search(request, namespace, filename):
 
-    return response.json(fileinfo)
+        version = request.args.get('version') or 'latest'
 
-@app.get('/versions/<namespace>/<filename>')
-async def show_versions(request, namespace, filename):
+        fileinfo = await storage.search(namespace, filename, version)
 
-    versions = await storage.versions(namespace, filename)
+        return response.json(fileinfo)
 
-    return response.json(versions)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    @app.get('/versions/<namespace>/<filename>')
+    async def show_versions(request, namespace, filename):
+
+        versions = await storage.versions(namespace, filename)
+
+        return response.json(versions)
+
+    return app
+

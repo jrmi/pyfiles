@@ -52,6 +52,7 @@ class DiskStorage(Storage):
 
         filepath = os.path.join(basename, f'{version}__{filename}')
 
+        # TODO make it async
         with open(filepath, 'wb') as fout:
             fout.write(stream.read())
 

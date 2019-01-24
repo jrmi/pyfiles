@@ -19,8 +19,7 @@ CURRENT_DIR = os.getcwd()
 sys.path.insert(0, CURRENT_DIR)
 
 import asyncio  # noqa
-import begin # noqa
-
+import begin
 
 @begin.subcommand # noqa: F722
 def search(namespace: "file namespace", filename: "filename", revision='latest'):
@@ -36,6 +35,7 @@ def search(namespace: "file namespace", filename: "filename", revision='latest')
     print(f"""url: {result['url']}
 version: {result['version']}""")
 
+
 @begin.subcommand  # noqa: F722
 def versions(namespace: "file namespace", filename: "filename"):
     """ Show available versions for a specific file """
@@ -50,6 +50,7 @@ def versions(namespace: "file namespace", filename: "filename"):
     print("Avaible version(s) for this file:")
     [print(v) for v in result]
 
+
 @begin.subcommand # noqa: F722
 def store(path: "file path to upload", namespace: "Namespace to store", filename: "File name to store", revision: "File version"):
     """ Store or update file in storage """
@@ -60,15 +61,27 @@ def store(path: "file path to upload", namespace: "Namespace to store", filename
     storage = get_storage(settings.BACKEND, settings.BACKEND_OPTIONS)
 
     with open(path, 'rb') as fin:
+        print("Storage in progress...")
         loop.run_until_complete(storage.store(stream=fin, namespace=namespace, filename=filename, version=revision))
 
     print("Stored!")
 
-#@begin.subcommand
-def serve():
-    pass
 
-@begin.start
+@begin.subcommand # noqa: F722
+def serve(host: "Web api host"="localhost", port:"Listen port"=8080):
+    from pyfiles.server import get_app
+
+    loop = asyncio.get_event_loop()
+    settings.init_settings()
+
+    storage = get_storage(settings.BACKEND, settings.BACKEND_OPTIONS)
+
+    app = get_app(storage)
+    import webbrowser; webbrowser.open(f"http://{host}:{port}")
+    app.run(host=host, port=port)
+
+
+@begin.start # noqa: F722
 def run(version=False):
     """ Pyfiles allow you to easilly store and share data files """
 

@@ -61,12 +61,30 @@ class S3Storage(Storage):
             'url': self._generate_temp_url(selected_file)
         }
 
+    async def versions(self, namespace, filename):
+        s3 = self.get_client()
+
+        bucket = s3.Bucket(self.bucket_name)
+
+        filelist = []
+        for obj in bucket.objects.filter(Prefix="/".join(namespace.split('.'))):
+
+            if obj.key.endswith(filename): # Filter only wanted filename
+                full_obj = s3.Object(self.bucket_name, obj.key)
+                obj_version = full_obj.metadata.get('version') # Extract version from metadata
+
+                filelist.append((obj_version, full_obj))
+
+
+        return [o[0] for o in filelist]
+
     async def store(self, stream, namespace, filename, version):
         s3 = self.get_client()
 
         # FIXME can we use os.path join here ?
         fname = "/".join(namespace.split('.')) + f'/{version}/{filename}'
 
+        # TODO make it async
         s3.Bucket(self.bucket_name).put_object(
             Key=fname,
             Body=stream,
