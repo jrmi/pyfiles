@@ -21,19 +21,25 @@ sys.path.insert(0, CURRENT_DIR)
 import asyncio  # noqa
 import begin # noqa
 
-@begin.subcommand
-def search(namespace, filename, version='latest'):
+
+@begin.subcommand # noqa: F722
+def search(namespace: "file namespace", filename: "filename", revision='latest'):
+    """ Search for an entry """
+
     loop = asyncio.get_event_loop()
     settings.init_settings()
 
     storage = get_storage(settings.BACKEND, settings.BACKEND_OPTIONS)
 
-    result = loop.run_until_complete(storage.search(namespace=namespace, filename=filename, version=version))
+    result = loop.run_until_complete(storage.search(namespace=namespace, filename=filename, version=revision))
 
-    print(result)
+    print(f"""url: {result['url']}
+version: {result['version']}""")
 
-@begin.subcommand
-def versions(namespace: "namespace store", filename: "Filename"):
+@begin.subcommand  # noqa: F722
+def versions(namespace: "file namespace", filename: "filename"):
+    """ Show available versions for a specific file """
+
     loop = asyncio.get_event_loop()
     settings.init_settings()
 
@@ -41,19 +47,22 @@ def versions(namespace: "namespace store", filename: "Filename"):
 
     result = loop.run_until_complete(storage.versions(namespace=namespace, filename=filename))
 
-    print(result)
+    print("Avaible version(s) for this file:")
+    [print(v) for v in result]
 
-@begin.subcommand
-def store(path: "file path to upload", namespace: "Namespace to store", filename: "File name to store", version: "File version"):
+@begin.subcommand # noqa: F722
+def store(path: "file path to upload", namespace: "Namespace to store", filename: "File name to store", revision: "File version"):
+    """ Store or update file in storage """
+
     loop = asyncio.get_event_loop()
     settings.init_settings()
 
     storage = get_storage(settings.BACKEND, settings.BACKEND_OPTIONS)
 
-    with open('path', 'rb') as fin:
-        loop.run_until_complete(storage.store(stream=fin, namespace=namespace, filename=filename, version=version))
+    with open(path, 'rb') as fin:
+        loop.run_until_complete(storage.store(stream=fin, namespace=namespace, filename=filename, version=revision))
 
-    print("Ok!")
+    print("Stored!")
 
 #@begin.subcommand
 def serve():

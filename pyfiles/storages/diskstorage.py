@@ -25,7 +25,7 @@ class DiskStorage(Storage):
         selected_file = filelist[-1]
 
         # TODO Add url prefix here
-        filepath = os.path.join(sorted(basename, selected_file))
+        filepath = os.path.join(basename, selected_file)
 
         return {
             'version': selected_file.split('__')[0],
@@ -45,9 +45,14 @@ class DiskStorage(Storage):
     async def store(self, stream, namespace, filename, version):
         basename = os.path.join(self.base, *namespace.split('.'))
 
+        try:
+            os.makedirs(basename)
+        except OSError:
+            pass
+
         filepath = os.path.join(basename, f'{version}__{filename}')
 
-        with open(filepath, 'w') as fout:
+        with open(filepath, 'wb') as fout:
             fout.write(stream.read())
 
 
