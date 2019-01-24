@@ -22,24 +22,81 @@ pyfiles
 
 A Big file collection manager.
 
-Usage
------
+CLI
+---
 
-Start inside the served data directory.
+Create a `settings.py` files where you want to execute the cli with
+this configuration for file storage:
+
+.. code-block:: python
+   :linenos:
+
+    BACKEND = "pyfiles.storages.diskstorage.DiskStorage"
+
+    BACKEND_OPTIONS = {
+        "basepath": "/tmp/tmpdir",
+        "base_url": "http://localhost:8000"
+    }
+
+And for S3:
+
+.. code-block:: python
+   :linenos:
+
+    BACKEND = "pyfiles.storages.s3storage.S3Storage"
+
+    BACKEND_OPTIONS = {
+        "access_key":"<you-S3-access-key>",
+        "secret_key":"<you-S3-secret-key>",
+        "endpoint_url":"<S3-api-endpoint>",
+        "region_name":"<region>",
+        "bucket_name":"<bucket name>",
+
+    }
+
+Then to store a file:
+
+.. code-block:: sh
+
+    $ pyfiles store <file.namespace> <file.name> <version>
+
+`version` must respect the format: YYYY.MM.DD-Rev
+
+To list all version of a file:
+
+.. code-block:: sh
+
+    $ pyfiles versions <file.namespace> <file.name>
+
+To search for a file:
+
+.. code-block:: sh
+
+    $ pyfiles search <file.namespace> <file.name> [<version-prefix>]
+
+`version-prefix` can be YYYY or YYYY.MM or YYYY.MM.DD or Latest. Latest if missing.
 
 
-API
-----
+Web API
+------
 
-**GET** on `/file/<namespace>/<filename>[?version=<version>]`
+    **GET** on `/file/<namespace>/<filename>[?version=<version>]`
 
-To download a file. Namespace is a namespace to organise data and filename is the filename.
+To get file version download link. `Namespace` is a namespace to organise data and `filename` is the file name.
 You can optionnaly add a version like `latest` or `<year>` or `<year.month>`, ...
 You get the latest for the specified version.
 
-**GET** on `/versions/<namespace>/<filename>`
+    **GET** on `/versions/<namespace>/<filename>`
 
 To show all avaible file versions.
+
+Python API
+----------
+
+See pyfiles.storage classes for more informations.
+
+You can use `pyfiles.storage.get_storage(<backend path>, <options>)` to initialize
+your storage.
 
 Features
 --------
@@ -53,9 +110,8 @@ Features
 Roadmap
 -------
 
-* Handle file diff between versions
 * Allow authentification with private data
-* Be storage agnostic
+* Handle file diff between versions
 * Get the update date of a file to ease caching
 * Add a client library and CLI
 
