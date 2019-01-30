@@ -58,7 +58,7 @@ Then to store a file:
 
 .. code-block:: sh
 
-    $ pyfiles store <file.namespace> <file.name> <version>
+    $ pyfiles store <file path> <file.namespace> <file.name> <version>
 
 `version` must respect the format: YYYY.MM.DD-Rev
 
