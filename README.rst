@@ -60,7 +60,8 @@ Then to store a file:
 
     $ pyfiles store <file path> <file.namespace> <file.name> <version>
 
-`version` must respect the format: YYYY.MM.DD-Rev
+`version` can respect the format based on time: YYYY.MM.DD-Rev
+or any [semver](https://semver.org/) like X.Y.Z
 
 To list all version of a file:
 
@@ -74,7 +75,13 @@ To search for a file:
 
     $ pyfiles search <file.namespace> <file.name> [<version-prefix>]
 
-`version-prefix` can be YYYY or YYYY.MM or YYYY.MM.DD or Latest. Latest if missing.
+`version-prefix` can be YYYY/X or YYYY.MM/X.Y or YYYY.MM.DD/X.Y.Z or Latest. Latest by default if missing.
+
+Finnaly to delete a file:
+
+.. code-block:: sh
+
+    $ pyfiles delete <file.namespace> <file.name> <version>
 
 To start the web api server:
 
@@ -89,7 +96,7 @@ Web API
     **GET** on `/search/<namespace>/<filename>[?version=<version>]`
 
 To get file version download link. `Namespace` is a namespace to organise data and `filename` is the file name.
-You can optionnaly add a version like `latest` or `<year>` or `<year.month>`, ...
+You can optionnaly add a version like `latest` or `<year>` or `<year.month>` or `<major>` or `<major>.<minor>`, ...
 You get the latest for the specified version.
 
     **GET** on `/versions/<namespace>/<filename>`
