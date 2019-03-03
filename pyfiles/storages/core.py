@@ -1,4 +1,13 @@
 import asyncio
+import aiohttp
+from contextlib import contextmanager
+import urllib.request
+import sys
+
+if sys.version_info >= (3, 7):
+    from contextlib import asynccontextmanager
+else:
+    asynccontextmanager = lambda x: x
 
 
 class Storage:  # TODO necessary ?
@@ -14,7 +23,24 @@ class Storage:  # TODO necessary ?
     async def delete(self, stream, namespace, filename):
         raise NotImplementedError()
 
-    # Synced version of previous method
+    @asynccontextmanager
+    async def open(self, namespace, filename, version):
+        result = self.search_sync(namespace, filename, version)
+        url = result["url"]
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                yield resp.context
+
+    @contextmanager
+    def open_sync(self, namespace, filename, version):
+        result = self.search_sync(namespace, filename, version)
+        url = result["url"]
+
+        with urllib.request.urlopen(url) as resp:
+            yield resp
+
+    # Synced version of previous methods
     def search_sync(self, namespace, filename, version):
         return asyncio.get_event_loop().run_until_complete(
             self.search(namespace, filename, version)

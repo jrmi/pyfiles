@@ -8,6 +8,7 @@ sanic = "*"
 aiofiles = "*"
 "boto3" = "*"
 begins = "*"
+aiohttp = "*"
 
 [dev-packages]
 pylint = "*"

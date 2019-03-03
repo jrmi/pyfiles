@@ -77,6 +77,12 @@ To search for a file:
 
 `version-prefix` can be YYYY/X or YYYY.MM/X.Y or YYYY.MM.DD/X.Y.Z or Latest. Latest by default if missing.
 
+Finnaly to delete a file:
+
+.. code-block:: sh
+
+    $ pyfiles delete <file.namespace> <file.name> <version>
+
 To start the web api server:
 
 .. code-block:: sh
