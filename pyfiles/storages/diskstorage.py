@@ -12,7 +12,10 @@ class DiskStorage(Storage):
         basename = os.path.join(self.base, *namespace.split("."))
 
         # TODO Should we awaitable
-        all_files = sorted(os.listdir(basename))
+        try:
+            all_files = sorted(os.listdir(basename))
+        except FileNotFoundError:
+            return None
 
         # TODO add regex match for YYYY_MM_DD-VV__<filename>
         filelist = [f for f in all_files if f.endswith(filename)]

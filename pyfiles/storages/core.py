@@ -17,14 +17,14 @@ class Storage:  # TODO necessary ?
     async def versions(self, namespace, filename):
         raise NotImplementedError()
 
-    async def store(self, stream, namespace, filename):
+    async def store(self, stream, namespace, filename, version):
         raise NotImplementedError()
 
     async def delete(self, stream, namespace, filename):
         raise NotImplementedError()
 
     @asynccontextmanager
-    async def open(self, namespace, filename, version):
+    async def open(self, namespace, filename, version="latest"):
         result = self.search_sync(namespace, filename, version)
         url = result["url"]
 
@@ -33,7 +33,7 @@ class Storage:  # TODO necessary ?
                 yield resp.context
 
     @contextmanager
-    def open_sync(self, namespace, filename, version):
+    def open_sync(self, namespace, filename, version="latest"):
         result = self.search_sync(namespace, filename, version)
         url = result["url"]
 
@@ -41,7 +41,7 @@ class Storage:  # TODO necessary ?
             yield resp
 
     # Synced version of previous methods
-    def search_sync(self, namespace, filename, version):
+    def search_sync(self, namespace, filename, version="latest"):
         return asyncio.get_event_loop().run_until_complete(
             self.search(namespace, filename, version)
         )
@@ -51,9 +51,9 @@ class Storage:  # TODO necessary ?
             self.versions(namespace, filename)
         )
 
-    def store_sync(self, stream, namespace, filename):
+    def store_sync(self, stream, namespace, filename, version):
         return asyncio.get_event_loop().run_until_complete(
-            self.store(stream, namespace, filename)
+            self.store(stream, namespace, filename, version)
         )
 
     def delete_sync(self, namespace, filename, version):
