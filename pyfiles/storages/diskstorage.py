@@ -1,23 +1,35 @@
 import os
+import asyncio
+from functools import partial
 
 from pyfiles.storages.core import Storage
+from concurrent.futures import ThreadPoolExecutor
 
 
 class DiskStorage(Storage):
-    def __init__(self, basepath, base_url):
+    def __init__(self, basepath, base_url, loop=None):
         self.base = os.path.realpath(basepath)
         self.base_url = base_url
+        self.executor = ThreadPoolExecutor(max_workers=3)
+        self.loop = loop or asyncio.get_event_loop()
+
+    async def listdir(self, path):
+        fun = partial(os.listdir, path)
+        return await self.loop.run_in_executor(self.executor, fun)
+
+    async def remove(self, path):
+        fun = partial(os.remove, path)
+        return await self.loop.run_in_executor(self.executor, fun)
 
     async def search(self, namespace, filename, version="latest"):
         basename = os.path.join(self.base, *namespace.split("."))
 
-        # TODO Should we awaitable
         try:
-            all_files = sorted(os.listdir(basename))
+            all_files = sorted(await self.listdir(basename))
         except FileNotFoundError:
             return None
 
-        # TODO add regex match for YYYY_MM_DD-VV__<filename>
+        # TODO add regex match for YYYY.MM.DD__<filename>
         filelist = [f for f in all_files if f.endswith(filename)]
 
         if version != "latest":
@@ -39,8 +51,7 @@ class DiskStorage(Storage):
     async def versions(self, namespace, filename):
         basename = os.path.join(self.base, *namespace.split("."))
 
-        # TODO Should we awaitable
-        all_files = sorted(os.listdir(basename))
+        all_files = sorted(await self.listdir(basename))
 
         versionlist = [f.split("__")[0] for f in all_files if f.endswith(filename)]
 
@@ -56,13 +67,14 @@ class DiskStorage(Storage):
 
         filepath = os.path.join(basename, f"{version}__{filename}")
 
-        # TODO make it async
-        with open(filepath, "wb") as fout:
-            fout.write(stream.read())
+        def write_file():
+            with open(filepath, "wb") as fout:
+                fout.write(stream.read())
+
+        return await self.loop.run_in_executor(self.executor, write_file)
 
     async def delete(self, namespace, filename, version):
         basename = os.path.join(self.base, *namespace.split("."))
         filepath = os.path.join(basename, f"{version}__{filename}")
 
-        # TODO make it async
-        os.remove(filepath)
+        await self.remove(filepath)
