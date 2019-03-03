@@ -92,3 +92,12 @@ class S3Storage(Storage):
                 'version': version,
             }
         )
+
+    async def delete(self, namespace, filename, version):
+        s3 = self.get_client()
+
+        # FIXME can we use os.path join here ?
+        fname = "/".join(namespace.split('.')) + f'/{version}/{filename}'
+
+        # TODO make it async
+        s3.Object(self.bucket_name, fname).delete()

@@ -68,6 +68,21 @@ def store(path: "file path to upload", namespace: "Namespace to store", filename
 
 
 @begin.subcommand # noqa: F722
+def delete(namespace: "Namespace to store", filename: "File name to delete", revision: "File version"):
+    """ Delete file from storage """
+
+    loop = asyncio.get_event_loop()
+    settings.init_settings()
+
+    storage = get_storage(settings.BACKEND, settings.BACKEND_OPTIONS)
+
+    print("Delete in progress...")
+    loop.run_until_complete(storage.delete(namespace=namespace, filename=filename, version=revision))
+
+    print("Deleted!")
+
+
+@begin.subcommand # noqa: F722
 def serve(host: "Web api host"="localhost", port:"Listen port"=8080):
     from pyfiles.server import get_app
 
