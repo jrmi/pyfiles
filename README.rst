@@ -61,7 +61,7 @@ Then to store a file:
     $ pyfiles store <file path> <file.namespace> <file.name> <version>
 
 `version` can respect the format based on time: YYYY.MM.DD-Rev
-or any [semver](https://semver.org/) like X.Y.Z
+or any `semver <https://semver.org/>`_ like X.Y.Z
 
 To list all version of a file:
 
