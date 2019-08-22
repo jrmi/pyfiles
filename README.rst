@@ -60,7 +60,7 @@ Then to store a file:
 
     $ pyfiles store <file path> <file.namespace> <file.name> <version>
 
-`version` can respect the format based on time: YYYY.MM.DD-Rev
+`version` should respect the format: YYYY.MM.DD-Rev
 or any `semver <https://semver.org/>`_ like X.Y.Z
 
 To list all version of a file:
@@ -75,7 +75,7 @@ To search for a file:
 
     $ pyfiles search <file.namespace> <file.name> [<version-prefix>]
 
-`version-prefix` can be YYYY/X or YYYY.MM/X.Y or YYYY.MM.DD/X.Y.Z or Latest. Latest by default if missing.
+`version-prefix` can be YYYY or X or YYYY.MM or X.Y or YYYY.MM.DD or X.Y.Z or Latest. Latest by default if missing.
 
 Finnaly to delete a file:
 
