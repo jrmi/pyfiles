@@ -22,6 +22,19 @@ pyfiles
 
 A Big file collection manager.
 
+Install
+-------
+
+In a virtual env:
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -U pip wheel
+pip install git+git://github.com/jrmi/pyfiles@master # Or any last commit
+# Then create your setup.py file before using CLI
+```
+
 CLI
 ---
 
