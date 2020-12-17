@@ -42,7 +42,6 @@ Create a `settings.py` files where you want to execute the cli with
 this configuration for file storage:
 
 .. code-block:: python
-   :linenos:
 
     BACKEND = "pyfiles.storages.diskstorage.DiskStorage"
 
@@ -54,7 +53,6 @@ this configuration for file storage:
 And for S3:
 
 .. code-block:: python
-   :linenos:
 
     BACKEND = "pyfiles.storages.s3storage.S3Storage"
 
@@ -104,7 +102,7 @@ To start the web api server:
 
 
 Web API
-------
+-------
 
     **GET** on `/search/<namespace>/<filename>[?version=<version>]`
 
@@ -142,7 +140,7 @@ Roadmap
 * Add a client library and CLI
 
 License
-------
+-------
 
 * Free software: MIT license
 * Documentation: https://pyfiles.readthedocs.io.
