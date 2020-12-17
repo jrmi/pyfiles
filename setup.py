@@ -42,9 +42,9 @@ setup(
     name="bygfiles",
     entry_points={"console_scripts": [
         "pyfiles = pyfiles.commands:run.start",
-        "bygfiles = pyfiles.commands:run.start"
+        "bygfiles = bygfiles.commands:run.start"
     ]},
-    packages=find_packages(include=["pyfiles", "pyfiles.storages"]),
+    packages=find_packages(include=["pyfiles", "pyfiles.storages", "bygfiles", "bygfiles.storages"]),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
