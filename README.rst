@@ -1,10 +1,10 @@
 =======
-pyfiles
+Bygfiles
 =======
 
 
-.. image:: https://img.shields.io/pypi/v/pyfiles.svg
-        :target: https://pypi.python.org/pypi/pyfiles
+.. image:: https://img.shields.io/pypi/v/bygfiles.svg
+        :target: https://pypi.python.org/pypi/bygfiles
 
 .. image:: https://img.shields.io/travis/jrmi/pyfiles.svg
         :target: https://travis-ci.org/jrmi/pyfiles
@@ -27,13 +27,14 @@ Install
 
 In a virtual env:
 
-```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -U pip wheel
-pip install git+git://github.com/jrmi/pyfiles@master # Or any last commit
-# Then create your setup.py file before using CLI
-```
+
+.. code-block:: sh
+
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -U pip wheel
+    pip install git+git://github.com/jrmi/pyfiles@master # Or any last commit
+    # Then create your setup.py file before using CLI
 
 CLI
 ---
@@ -43,7 +44,7 @@ this configuration for file storage:
 
 .. code-block:: python
 
-    BACKEND = "pyfiles.storages.diskstorage.DiskStorage"
+    BACKEND = "bygfiles.storages.diskstorage.DiskStorage"
 
     BACKEND_OPTIONS = {
         "basepath": "/tmp/tmpdir",
@@ -54,7 +55,7 @@ And for S3:
 
 .. code-block:: python
 
-    BACKEND = "pyfiles.storages.s3storage.S3Storage"
+    BACKEND = "bygfiles.storages.s3storage.S3Storage"
 
     BACKEND_OPTIONS = {
         "access_key":"<you-S3-access-key>",
@@ -69,7 +70,7 @@ Then to store a file:
 
 .. code-block:: sh
 
-    $ pyfiles store <file path> <file.namespace> <file.name> <version>
+    $ bygfiles store <file path> <file.namespace> <file.name> <version>
 
 `version` should respect the format: YYYY.MM.DD-Rev
 or any `semver <https://semver.org/>`_ like X.Y.Z
@@ -78,13 +79,13 @@ To list all version of a file:
 
 .. code-block:: sh
 
-    $ pyfiles versions <file.namespace> <file.name>
+    $ bygfiles versions <file.namespace> <file.name>
 
 To search for a file:
 
 .. code-block:: sh
 
-    $ pyfiles search <file.namespace> <file.name> [<version-prefix>]
+    $ bygfiles search <file.namespace> <file.name> [<version-prefix>]
 
 `version-prefix` can be YYYY or X or YYYY.MM or X.Y or YYYY.MM.DD or X.Y.Z or Latest. Latest by default if missing.
 
@@ -92,13 +93,13 @@ Finnaly to delete a file:
 
 .. code-block:: sh
 
-    $ pyfiles delete <file.namespace> <file.name> <version>
+    $ bygfiles delete <file.namespace> <file.name> <version>
 
 To start the web api server:
 
 .. code-block:: sh
 
-    $ pyfiles serve
+    $ bygfiles serve
 
 
 Web API
@@ -117,9 +118,9 @@ To show all avaible file versions.
 Python API
 ----------
 
-See pyfiles.storage classes for more informations.
+See bygfiles.storage classes for more informations.
 
-You can use `pyfiles.storage.get_storage(<backend path>, <options>)` to initialize
+You can use `bygfiles.storage.get_storage(<backend path>, <options>)` to initialize
 your storage.
 
 Features
